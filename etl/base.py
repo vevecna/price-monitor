@@ -27,6 +27,6 @@ class Extractor(ABC):
         if faltando:
             raise ValueError(
                 f"{nome}: colunas ausentes no retirno {sorted(faltando)}"
-                             )
+                )
         logger.info("Extração concluída: %s -> %d linhas", nome, len(df))
         return df
