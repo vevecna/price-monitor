@@ -1,5 +1,7 @@
+.claude/
 .venv/
 __pycache__/
 *.pyc
 .env
+staging/
 01_INSTRUCTIONS.md
