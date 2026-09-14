@@ -14,7 +14,4 @@ class CotacaoAPIExtractor(Extractor):
         resp.raise_for_status()
         data = resp.json()
         rows = [{'par': k, 'valor': float(v['bid']),'ts': v['create_date']}for k, v in data.items()]
-        return pd.DataFrame(rows)
-
-
-print()
+        return pd.DataFrame(rows, columns=list(self.schema))
