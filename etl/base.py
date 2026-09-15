@@ -13,6 +13,7 @@ class Extractor(ABC):
 
     @abstractmethod
     def extract(self) -> pd.DataFrame:
+        """coleta os dados da fonte e dfevolve Dataframe cru"""
         ...
 
     def run(self) -> pd.DataFrame:
@@ -21,7 +22,7 @@ class Extractor(ABC):
         df = self.extract()
 
         if not isinstance(df, pd.DataFrame):
-            raise TypeError(f"{nome}.extract() deve retornar um DataFrame()")
+            raise TypeError(f"{nome}.extract() deve retornar um DataFrame")
 
         faltando = set(self.schema) - set(df.columns)
         if faltando:
