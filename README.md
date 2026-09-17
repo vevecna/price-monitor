@@ -6,7 +6,7 @@ e carrega em **PostgreSQL**. Todo o desenvolvimento segue **Git Flow**.
 
 ---
 
-## � O que este projeto faz
+## 🎯 O que este projeto faz
 
 1. **Extrai** dados de três fontes diferentes:
    - **API REST** (cotações USD-BRL / EUR-BRL via AwesomeAPI) — `requests`
@@ -19,33 +19,10 @@ e carrega em **PostgreSQL**. Todo o desenvolvimento segue **Git Flow**.
    hora, com *retries* automáticos e monitoramento pela UI.
 
 ---
+## 🏭 Arquitetura
 
-## � Arquitetura
 
-```
-      ┌─────────────┐   ┌──────────────┐   ┌───────────────┐
-      │  API REST   │   │  Scraping    │   │   Selenium    │
-      │ (requests)  │   │   (BS4)      │   │   (dinâmico)  │
-      └──────┬──────┘   └──────┬───────┘   └───────┬───────┘
-             │                 │                   │
-             └────────┬────────┴─────────┬─────────┘
-                      ▼                   ▼
-                ┌─────────────────────────────┐
-                │   Transform + validação      │   pandas
-                │   (etl/transform.py)         │
-                └──────────────┬───────────────┘
-                               ▼
-                     ┌───────────────────┐
-                     │   Load (SQL)      │   sqlalchemy
-                     │  (etl/load.py)    │
-                     └─────────┬─────────┘
-                               ▼
-                        ┌────────────┐
-                        │ PostgreSQL │
-                        └────────────┘
-
-      Tudo agendado e monitorado pela DAG do Airflow (dags/pipeline_cotacoes.py)
-```
+![Arquitetura](./img/arquitetura-price-monitor.drawio.png)
 
 Cada extrator implementa o mesmo contrato (`etl/base.py → Extractor`), então a
 DAG é agnóstica à fonte: trocar/adicionar uma fonte não mexe no restante do
@@ -53,7 +30,7 @@ pipeline.
 
 ---
 
-## � Estrutura de pastas
+## 📁 Estrutura de pastas
 
 ```
 price-monitor/
@@ -75,7 +52,7 @@ price-monitor/
 
 ---
 
-## � Tecnologias
+## 🛠️ Tecnologias
 
 | Categoria | Ferramenta |
 |-----------|------------|
@@ -138,7 +115,7 @@ carregar(df, "cotacoes")
 
 ---
 
-## � Testes
+## 🧪 Testes
 
 ```bash
 pytest
@@ -146,7 +123,7 @@ pytest
 
 ---
 
-## � Fluxo de trabalho (Git Flow)
+## 🌱 Fluxo de trabalho (Git Flow)
 
 - `main` — versões estáveis (tags de release)
 - `develop` — integração contínua do desenvolvimento
@@ -162,7 +139,7 @@ git checkout main && git merge --no-ff release/1.0.0 && git tag v1.0.0
 
 ---
 
-## � Próximos passos
+## 🚀 Próximos passos
 
 - Alertas de falha (Slack/e-mail) na DAG
 - Deploy do Airflow com `docker-compose` completo
