@@ -27,7 +27,7 @@ class Extractor(ABC):
         faltando = set(self.schema) - set(df.columns)
         if faltando:
             raise ValueError(
-                f"{nome}: colunas ausentes no retirno {sorted(faltando)}"
+                f"{nome}: colunas ausentes no retorno {sorted(faltando)}"
                 )
         if df.empty:
             logger.warning("%s retornou 0 linhas - verifique a fonte", nome)
