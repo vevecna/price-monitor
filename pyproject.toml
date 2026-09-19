@@ -1,0 +1,13 @@
+# Configuracao do pytest.
+#
+# POR QUE ESTE ARQUIVO EXISTE:
+# Sem ele, `pytest` puro falha com "ModuleNotFoundError: No module named 'etl'".
+# Motivo: o pytest coloca no sys.path a pasta do teste (tests/), nao a raiz do
+# projeto. Ja `python -m pytest` acrescenta o diretorio atual — por isso um
+# funciona e o outro nao, com o mesmo codigo.
+#
+# `pythonpath = ["."]` poe a raiz no sys.path e faz os dois funcionarem.
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-q"
