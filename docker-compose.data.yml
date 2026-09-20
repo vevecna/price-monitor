@@ -1,0 +1,47 @@
+# Serviços do PROJETO (não confundir com o compose do Airflow).
+#
+#   docker compose -f docker-compose.data.yml up -d postgres
+#   docker compose -f docker-compose.data.yml up -d selenium    # opcional
+#   docker compose -f docker-compose.data.yml ps
+#   docker compose -f docker-compose.data.yml down              # mantém os dados
+#   docker compose -f docker-compose.data.yml down -v           # APAGA os dados
+#
+# ⚠️ O Airflow sobe um Postgres PRÓPRIO (banco de metadados dele). Este aqui é
+# outro: é o DESTINO dos seus dados, onde a tabela `cotacoes` vai existir.
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: monitor-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER:-monitor}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-monitor}
+      POSTGRES_DB: ${DB_NAME:-monitor}        # já criado na primeira subida
+    ports:
+      # host:container — se a 5432 já estiver ocupada na sua máquina,
+      # troque para "5433:5432" e ajuste DB_PORT=5433 no .env
+      - "5432:5432"
+    volumes:
+      # Sem este volume, `down` apagaria os dados. Com ele, sobrevivem.
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # o compose só marca "healthy" quando o banco aceita conexão
+      test: ["CMD-SHELL", "pg_isready -U monitor -d monitor"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # OPCIONAL — Chrome como serviço, para o Selenium rodar dentro de container
+  # (a imagem do Airflow não tem navegador instalado).
+  # Use com SELENIUM_REMOTE_URL=http://localhost:4444/wd/hub no .env
+  selenium:
+    image: selenium/standalone-chrome:latest
+    container_name: monitor-selenium
+    shm_size: "2gb"        # sem isto o Chrome estoura a memória compartilhada
+    ports:
+      - "4444:4444"        # endpoint do WebDriver
+      - "7900:7900"        # VNC: veja o navegador em http://localhost:7900
+                           # (senha: secret) — ótimo para entender o que ocorre
+
+volumes:
+  pgdata:
