@@ -20,7 +20,7 @@ services:
     ports:
       # host:container — se a 5432 já estiver ocupada na sua máquina,
       # troque para "5433:5432" e ajuste DB_PORT=5433 no .env
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       # Sem este volume, `down` apagaria os dados. Com ele, sobrevivem.
       - pgdata:/var/lib/postgresql/data
